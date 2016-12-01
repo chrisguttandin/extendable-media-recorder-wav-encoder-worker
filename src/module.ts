@@ -14,7 +14,7 @@ self.addEventListener('message', ({ data }) => {
             .forEach((typedArray, index) => {
                 const recordedTypedArray = recordedTypedArrays[index];
 
-                recordedTypedArrays[index] = concat(recordedTypedArray, typedArray);
+                recordedTypedArrays[index] = concat(Float32Array, recordedTypedArray, typedArray);
             });
     }
 
