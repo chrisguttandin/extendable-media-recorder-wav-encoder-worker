@@ -40,14 +40,14 @@ describe('encode()', () => {
             loadFixtureAsArrayBuffer(filename + '.wav', (err, fileArrayBuffer) => {
                 expect(err).to.be.null;
 
-                fileArrayBufferAsArray = Array.from(new Uint8Array(fileArrayBuffer));
+                fileArrayBufferAsArray = Array.from(new Uint16Array(fileArrayBuffer));
 
                 done();
             });
         });
 
         it('should encode the arrayBuffer as a wav file', () => {
-            const encodeArrayBufferAsArray = Array.from(new Uint8Array(encode(audioTypedArrays, {
+            const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(audioTypedArrays, {
                 bitRate,
                 sampleRate
             })));
