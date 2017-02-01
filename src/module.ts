@@ -3,9 +3,7 @@ import { encode } from './helpers/encode';
 
 const recordedTypedArrays = [];
 
-self.addEventListener('message', ({ data }) => {
-    const { done = false, typedArrays = [] } = data;
-
+self.addEventListener('message', ({ data: { done = false, typedArrays = [] } }) => {
     if (recordedTypedArrays.length === 0) {
         typedArrays
             .forEach((typedArray) => recordedTypedArrays.push(typedArray));
