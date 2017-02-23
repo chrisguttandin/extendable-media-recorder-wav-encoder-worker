@@ -1,7 +1,8 @@
 import { concat } from './helpers/concat';
 import { encode } from './helpers/encode';
+import { TypedArray } from './types/typed-array';
 
-const recordedTypedArrays = [];
+const recordedTypedArrays: TypedArray[] = [];
 
 addEventListener('message', ({ data: { done = false, typedArrays = [] } }) => {
     if (recordedTypedArrays.length === 0) {

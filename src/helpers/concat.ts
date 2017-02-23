@@ -1,4 +1,7 @@
-export const concat = (TypedArray, ...typedArrays) => { // tslint:disable-line:variable-name
+import { ITypedArrayConstructor } from '../interfaces/typed-array';
+import { TypedArray } from '../types/typed-array';
+
+export const concat = (TypedArray: ITypedArrayConstructor, ...typedArrays: TypedArray[]) => { // tslint:disable-line:variable-name
     const tmp = new Uint8Array(typedArrays.reduce((byteLength, typedArray) => byteLength + typedArray.byteLength, 0));
 
     typedArrays
