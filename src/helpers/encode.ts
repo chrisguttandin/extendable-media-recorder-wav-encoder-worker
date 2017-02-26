@@ -41,7 +41,9 @@ export const encode = (audioTypedArrays: TypedArray[] = [], { bitRate = 16, samp
         .forEach((audioTypedArray, index) => {
             const offset = 44 + (index * bytesPerSample);
 
-            for (let i = 0, length = numberOfSamples; i < length; i += 1) {
+            const length = numberOfSamples;
+
+            for (let i = 0; i < length; i += 1) {
                 const position = offset + (i * numberOfChannels * bytesPerSample);
 
                 const value = Math.max(-1, Math.min(audioTypedArray[i], 1));
