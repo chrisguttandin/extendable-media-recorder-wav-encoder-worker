@@ -32,7 +32,7 @@
     "rollup-plugin-babel": "^2.6.1",
     "sinon": "^2.0.0",
     "sinon-chai": "^2.8.0",
-    "standardized-audio-context": "^5.0.0",
+    "standardized-audio-context": "^6.0.0",
     "ts-loader": "^2.0.0",
     "tslint-config-holy-grail": "^7.0.0",
     "typescript": "^2.1.5",
