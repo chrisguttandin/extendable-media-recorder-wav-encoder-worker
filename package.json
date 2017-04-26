@@ -44,9 +44,9 @@
     "src/"
   ],
   "homepage": "https://github.com/chrisguttandin/extendable-media-recorder-wav-encoder-worker",
-  "jsnext:main": "build/es2015/module.js",
   "license": "MIT",
   "main": "build/es5/bundle.js",
+  "module": "build/es2015/module.js",
   "name": "extendable-media-recorder-wav-encoder-worker",
   "repository": {
     "type": "git",
