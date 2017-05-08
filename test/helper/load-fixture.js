@@ -7,7 +7,7 @@ export const loadFixtureAsArrayBuffer = (fixture, callback) => {
     request.onload = function (event) {
         callback(null, event.target.response);
     };
-    request.open('GET', 'base/test/fixtures/' + fixture);
+    request.open('GET', '/base/test/fixtures/' + fixture);
     request.responseType = 'arraybuffer';
     request.send();
 };

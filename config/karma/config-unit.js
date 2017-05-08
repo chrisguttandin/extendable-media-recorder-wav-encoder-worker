@@ -4,6 +4,28 @@ module.exports = (config) => {
 
         basePath: '../../',
 
+        client: {
+            mochaWebWorker: {
+                evaluate: {
+                    // This is basically a part of the functionality which karma-sinon-chai would provide in a Window.
+                    beforeRun : `(function(self) {
+                        self.should = null;
+                        self.should = self.chai.should();
+                        self.expect = self.chai.expect;
+                        self.assert = self.chai.assert;
+                    })(self);`
+                },
+                pattern: [
+                    '**/chai/**',
+                    '**/leche/**',
+                    '**/lolex/**',
+                    '**/sinon/**',
+                    '**/sinon-chai/**',
+                    'test/unit/**/*.js'
+                ]
+            }
+        },
+
         files: [
             {
                 included: false,
@@ -15,13 +37,17 @@ module.exports = (config) => {
                 pattern: 'test/fixtures/**',
                 served: true,
                 watched: true
-            },
-            'test/unit/**/*.js'
+            }, {
+                included: false,
+                pattern: 'test/unit/**/*.js',
+                served: true,
+                watched: true
+            }
         ],
 
         frameworks: [
             'leche',
-            'mocha',
+            'mocha-webworker',
             'sinon-chai'
         ],
 
