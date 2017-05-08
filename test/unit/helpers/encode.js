@@ -1,32 +1,24 @@
-import { AudioContext } from 'standardized-audio-context';
 import { encode } from '../../../src/helpers/encode';
 import { loadFixtureAsArrayBuffer } from '../../helper/load-fixture';
 
 describe('encode()', () => {
 
-    let audioContext;
-
     let audioTypedArrays;
 
-    before(() => {
-        audioContext = new AudioContext();
-    });
-
-    beforeEach((done) => {
-        loadFixtureAsArrayBuffer('1000-frames-of-noise.wav', (err, fileArrayBuffer) => {
+    beforeEach(function (done) {
+        loadFixtureAsArrayBuffer('1000-frames-of-noise-left.pcm', (err, leftChannelArrayBuffer) => {
             expect(err).to.be.null;
 
-            audioContext
-                .decodeAudioData(fileArrayBuffer.slice(0))
-                .then((audioBuffer) => {
-                    audioTypedArrays = [];
+            loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm', (err, rightChannelArrayBuffer) => {
+                expect(err).to.be.null;
 
-                    for (let i = 0; i < audioBuffer.numberOfChannels; i += 1) {
-                        audioTypedArrays.push(audioBuffer.getChannelData(i));
-                    }
+                audioTypedArrays = [
+                    new Float32Array(leftChannelArrayBuffer),
+                    new Float32Array(rightChannelArrayBuffer)
+                ];
 
-                    done();
-                });
+                done();
+            });
         });
     });
 
