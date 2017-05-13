@@ -11,7 +11,6 @@ describe('module', () => {
     let typedArrays;
     let worker;
 
-
     beforeEach(() => {
         audioContext = new AudioContext();
 
