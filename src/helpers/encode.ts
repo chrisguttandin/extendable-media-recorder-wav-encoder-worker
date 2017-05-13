@@ -1,4 +1,4 @@
-import { TypedArray } from '../types/typed-array';
+import { TypedArray } from '../types';
 
 export const encode = (audioTypedArrays: TypedArray[] = [], { bitRate = 16, sampleRate = 44100 } = {}) => {
     const bytesPerSample = bitRate >> 3; // tslint:disable-line:no-bitwise

@@ -1,4 +1,4 @@
-import { TypedArray } from '../types/typed-array';
+import { TypedArray } from '../types';
 
 export interface ITypedArrayConstructor {
 

@@ -1,6 +1,6 @@
 import { concat } from './helpers/concat';
 import { encode } from './helpers/encode';
-import { TypedArray } from './types/typed-array';
+import { TypedArray } from './types';
 
 const recordedTypedArrays: TypedArray[] = [];
 
