@@ -1,4 +1,4 @@
-export type TypedArray = Float32Array
+export type TTypedArray = Float32Array
     | Float64Array
     | Int8Array
     | Int16Array

@@ -1,7 +1,7 @@
-import { TypedArray } from '../types';
+import { TTypedArray } from '../types';
 
 export interface ITypedArrayConstructor {
 
-    new (arrayBuffer: ArrayBuffer): TypedArray;
+    new (arrayBuffer: ArrayBuffer): TTypedArray;
 
 }

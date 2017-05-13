@@ -3,16 +3,22 @@ import { loadFixtureAsArrayBuffer } from '../helper/load-fixture';
 
 describe('module', () => {
 
+    let arrayBuffer;
     let audioContext;
-
-    let audioTypedArrays;
-
-    let encodedFileArrayBuffer;
-
+    let encodeRequestId;
+    let recordRequestId;
+    let recordingId;
+    let typedArrays;
     let worker;
+
 
     beforeEach(() => {
         audioContext = new AudioContext();
+
+        encodeRequestId = 1293;
+        recordRequestId = 2731;
+
+        recordingId = 1022;
 
         worker = new Worker('base/src/module.ts');
     });
@@ -24,10 +30,10 @@ describe('module', () => {
             audioContext
                 .decodeAudioData(fileArrayBuffer.slice(0))
                 .then((audioBuffer) => {
-                    audioTypedArrays = [];
+                    typedArrays = [];
 
                     for (let i = 0; i < audioBuffer.numberOfChannels; i += 1) {
-                        audioTypedArrays.push(audioBuffer.getChannelData(i));
+                        typedArrays.push(audioBuffer.getChannelData(i));
                     }
 
                     done();
@@ -36,10 +42,10 @@ describe('module', () => {
     });
 
     beforeEach((done) => {
-        loadFixtureAsArrayBuffer('1000-frames-of-noise-44100-16-stereo.wav', (err, fileArrayBuffer) => {
+        loadFixtureAsArrayBuffer('1000-frames-of-noise-44100-16-stereo.wav', (err, rryBffr) => {
             expect(err).to.be.null;
 
-            encodedFileArrayBuffer = fileArrayBuffer;
+            arrayBuffer = rryBffr;
 
             done();
         });
@@ -48,17 +54,47 @@ describe('module', () => {
     it('should encode a wav file', function (done) {
         this.timeout(6000);
 
-        worker.addEventListener('message', ({ data: { arrayBuffer } }) => {
-            for (let i = 0, length = encodedFileArrayBuffer.length; i < length; i += 1) {
-                expect(encodedFileArrayBuffer[i]).to.be.closeTo(arrayBuffer[i], 1);
-            }
+        let receivedEncodeResponse = false;
+        let receivedRecordResponse = false;
 
-            done();
+        worker.addEventListener('message', ({ data }) => {
+            if (data.id === encodeRequestId && !receivedEncodeResponse) {
+                receivedEncodeResponse = true;
+
+                expect(data).to.deep.equal({
+                    error: null,
+                    id: encodeRequestId,
+                    result: null
+                });
+
+                worker.postMessage({
+                    id: recordRequestId,
+                    method: 'encode',
+                    params: { recordingId }
+                });
+            } else if (data.id === recordRequestId && !receivedRecordResponse) {
+                receivedRecordResponse = true;
+
+                for (let i = 0, length = arrayBuffer.length; i < length; i += 1) {
+                    expect(arrayBuffer[i]).to.be.closeTo(data.result.arrayBuffer[i], 1);
+                }
+
+                expect(data).to.deep.equal({
+                    error: null,
+                    id: recordRequestId,
+                    result: { arrayBuffer: data.result.arrayBuffer }
+                });
+
+                done();
+            } else {
+                done(new Error('This should never happen.'));
+            }
         });
 
         worker.postMessage({
-            done: true,
-            typedArrays: audioTypedArrays
+            id: encodeRequestId,
+            method: 'record',
+            params: { recordingId, typedArrays }
         });
 
     });
