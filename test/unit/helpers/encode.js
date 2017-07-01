@@ -22,7 +22,7 @@ describe('encode()', () => {
         });
     });
 
-    leche.withData([ // eslint-disable-line no-undef
+    leche.withData([
         [ '1000-frames-of-noise-44100-16-stereo', 44100, 16 ]
     ], (filename, sampleRate, bitRate) => {
 
