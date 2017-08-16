@@ -22,7 +22,9 @@ describe('module', () => {
         worker = new Worker('base/src/module.ts');
     });
 
-    beforeEach((done) => {
+    beforeEach(function (done) {
+        this.timeout(6000);
+
         loadFixtureAsArrayBuffer('1000-frames-of-noise.wav', (err, fileArrayBuffer) => {
             expect(err).to.be.null;
 
@@ -40,7 +42,9 @@ describe('module', () => {
         });
     });
 
-    beforeEach((done) => {
+    beforeEach(function (done) {
+        this.timeout(6000);
+
         loadFixtureAsArrayBuffer('1000-frames-of-noise-44100-16-stereo.wav', (err, rryBffr) => {
             expect(err).to.be.null;
 
