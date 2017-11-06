@@ -11,7 +11,7 @@ export const concat = (TypedArray: ITypedArrayConstructor, ...typedArrays: TType
             return offset + typedArray.byteLength;
         }, 0);
 
-    return new TypedArray(tmp.buffer);
+    return new TypedArray(<ArrayBuffer> tmp.buffer);
 };
 
 export default concat;
