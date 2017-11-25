@@ -13,5 +13,3 @@ export const concat = (TypedArray: ITypedArrayConstructor, ...typedArrays: TType
 
     return new TypedArray(<ArrayBuffer> tmp.buffer);
 };
-
-export default concat;
