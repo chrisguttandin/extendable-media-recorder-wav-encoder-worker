@@ -1,6 +1,6 @@
 import { concat } from './helpers/concat';
 import { encode } from './helpers/encode';
-import { IBrokerEvent, IEncodeResponse, IErrorResponse, IRecordResponse } from './interfaces';
+import { IBrokerEvent, IEncodeResponse, IErrorResponse, IRecordResponse } from './interfaces';
 import { TTypedArray } from './types';
 
 export * from './interfaces';
@@ -11,7 +11,7 @@ const recordings: Map<number, TTypedArray[]> = new Map();
 addEventListener('message', ({ data }: IBrokerEvent) => {
     try {
         if (data.method === 'encode') {
-            const { id, params: { recordingId } } = data;
+            const { id, params: { recordingId } } = data;
 
             const recordedTypedArrays = recordings.get(recordingId);
 
@@ -21,7 +21,7 @@ addEventListener('message', ({ data }: IBrokerEvent) => {
 
             postMessage(<IEncodeResponse> { error: null, id, result: { arrayBuffer } });
         } else if (data.method === 'record') {
-            const { id, params: { recordingId, typedArrays } } = data;
+            const { id, params: { recordingId, typedArrays } } = data;
 
             const recordedTypedArrays = recordings.get(recordingId);
 
