@@ -105,9 +105,7 @@ module.exports = (config) => {
                 FirefoxSauceLabs: {
                     base: 'SauceLabs',
                     browserName: 'firefox',
-                    platform: 'OS X 10.11',
-                    // @todo Use the latest stable version of Firefox again when version 51 is available.
-                    version: 'beta'
+                    platform: 'OS X 10.11'
                 }
             },
 
