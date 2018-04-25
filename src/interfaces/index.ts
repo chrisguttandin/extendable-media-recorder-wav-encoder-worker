@@ -1,4 +1,6 @@
 export * from './broker-event';
+export * from './characterize-request';
+export * from './characterize-response';
 export * from './encode-request';
 export * from './encode-response';
 export * from './error-response';

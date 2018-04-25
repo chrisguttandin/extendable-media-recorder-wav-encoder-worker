@@ -1,5 +1,5 @@
 import { encode } from './helpers/encode';
-import { IBrokerEvent, IEncodeResponse, IErrorResponse, IRecordResponse } from './interfaces';
+import { IBrokerEvent, ICharacterizeResponse, IEncodeResponse, IErrorResponse, IRecordResponse } from './interfaces';
 import { TTypedArray } from './types';
 
 export * from './interfaces';
@@ -9,7 +9,11 @@ const recordings: Map<number, TTypedArray[][]> = new Map();
 
 addEventListener('message', ({ data }: IBrokerEvent) => {
     try {
-        if (data.method === 'encode') {
+        if (data.method === 'characterize') {
+            const { id } = data;
+
+            postMessage(<ICharacterizeResponse> { error: null, id, result: { regex: /^audio\/wav$/ } });
+        } else if (data.method === 'encode') {
             const { id, params: { recordingId } } = data;
 
             const recordedTypedArrays = recordings.get(recordingId);

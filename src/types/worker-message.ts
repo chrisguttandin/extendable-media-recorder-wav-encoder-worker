@@ -1,3 +1,3 @@
-import { IEncodeResponse, IErrorResponse, IRecordResponse } from '../interfaces';
+import { ICharacterizeResponse, IEncodeResponse, IErrorResponse, IRecordResponse } from '../interfaces';
 
-export type TWorkerMessage = IEncodeResponse | IErrorResponse | IRecordResponse;
+export type TWorkerMessage = ICharacterizeResponse | IEncodeResponse | IErrorResponse | IRecordResponse;

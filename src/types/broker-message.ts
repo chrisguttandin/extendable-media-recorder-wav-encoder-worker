@@ -1,3 +1,3 @@
-import { IEncodeRequest, IRecordRequest } from '../interfaces';
+import { ICharacterizeRequest, IEncodeRequest, IRecordRequest } from '../interfaces';
 
-export type TBrokerMessage = IEncodeRequest | IRecordRequest;
+export type TBrokerMessage = ICharacterizeRequest | IEncodeRequest | IRecordRequest;
