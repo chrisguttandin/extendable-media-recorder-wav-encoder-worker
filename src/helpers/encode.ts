@@ -29,14 +29,11 @@ export const encode = (audioTypedArrays: TTypedArray[] = [], { bitRate = 16, sam
         .forEach((audioTypedArray, index) => {
             const offset = 44 + (index * bytesPerSample);
 
-            const length = numberOfSamples;
-
-            for (let i = 0; i < length; i += 1) {
+            for (let i = 0; i < numberOfSamples; i += 1) {
                 const position = offset + (i * numberOfChannels * bytesPerSample);
+                const value = audioTypedArray[i];
 
-                const value = Math.max(-1, Math.min(audioTypedArray[i], 1));
-
-                dataView.setUint16(position, (value < 0) ? value * 32768 : value * 32767, true);
+                dataView.setUint16(position, (value < 0) ? Math.max(-1, value) * 32768 : Math.min(1, value) * 32767, true);
             }
         });
 
