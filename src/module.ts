@@ -14,11 +14,11 @@ addEventListener('message', ({ data }: IBrokerEvent) => {
 
             const recordedTypedArrays = recordings.get(recordingId);
 
-            const arrayBuffer = encode(recordedTypedArrays);
+            const arrayBuffers = encode(recordedTypedArrays);
 
             recordings.delete(recordingId);
 
-            postMessage(<IEncodeResponse> { error: null, id, result: { arrayBuffer } });
+            postMessage(<IEncodeResponse> { error: null, id, result: { arrayBuffers } });
         } else if (data.method === 'record') {
             const { id, params: { recordingId, typedArrays } } = data;
 

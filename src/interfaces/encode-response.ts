@@ -6,7 +6,7 @@ export interface IEncodeResponse {
 
     result: {
 
-        arrayBuffer: ArrayBuffer;
+        arrayBuffers: ArrayBuffer[];
 
     };
 

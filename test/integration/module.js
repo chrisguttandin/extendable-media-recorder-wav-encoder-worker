@@ -79,13 +79,13 @@ describe('module', () => {
                 receivedRecordResponse = true;
 
                 for (let i = 0, length = arrayBuffer.length; i < length; i += 1) {
-                    expect(arrayBuffer[i]).to.be.closeTo(data.result.arrayBuffer[i], 1);
+                    expect(arrayBuffer[i]).to.be.closeTo(data.result.arrayBuffers[0][i], 1);
                 }
 
                 expect(data).to.deep.equal({
                     error: null,
                     id: recordRequestId,
-                    result: { arrayBuffer: data.result.arrayBuffer }
+                    result: { arrayBuffers: data.result.arrayBuffers }
                 });
 
                 done();

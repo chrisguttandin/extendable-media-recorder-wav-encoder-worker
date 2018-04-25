@@ -43,5 +43,5 @@ export const encode = (audioTypedArrays: TTypedArray[][] = [], { bitRate = 16, s
                 });
         });
 
-    return arrayBuffer;
+    return [ arrayBuffer ];
 };

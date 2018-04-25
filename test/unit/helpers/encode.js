@@ -51,7 +51,7 @@ describe('encode()', () => {
             const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(audioTypedArrays, {
                 bitRate,
                 sampleRate
-            })));
+            })[0]));
 
             for (let i = 0, length = encodeArrayBufferAsArray.length; i < length; i += 1) {
                 expect(encodeArrayBufferAsArray[i]).to.be.closeTo(fileArrayBufferAsArray[i], 1);
