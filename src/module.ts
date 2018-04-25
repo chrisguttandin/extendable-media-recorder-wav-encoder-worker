@@ -18,7 +18,7 @@ addEventListener('message', ({ data }: IBrokerEvent) => {
 
             recordings.delete(recordingId);
 
-            postMessage(<IEncodeResponse> { error: null, id, result: { arrayBuffers } });
+            postMessage(<IEncodeResponse> { error: null, id, result: { arrayBuffers } }, arrayBuffers);
         } else if (data.method === 'record') {
             const { id, params: { recordingId, typedArrays } } = data;
 
