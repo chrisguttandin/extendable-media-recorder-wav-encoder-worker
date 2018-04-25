@@ -1,6 +1,18 @@
 import { encode } from '../../../src/helpers/encode';
 import { loadFixtureAsArrayBuffer } from '../../helper/load-fixture';
 
+const split = (channelArrayBuffer) => {
+    const chunks = [ ];
+
+    for (let i = 0; i < channelArrayBuffer.byteLength; i += Float32Array.BYTES_PER_ELEMENT * 128) {
+        const length = Math.min((channelArrayBuffer.byteLength - i) / Float32Array.BYTES_PER_ELEMENT, 128);
+
+        chunks.push(new Float32Array(channelArrayBuffer, i, length));
+    }
+
+    return chunks;
+};
+
 describe('encode()', () => {
 
     let audioTypedArrays;
@@ -12,10 +24,7 @@ describe('encode()', () => {
             loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm', (err, rightChannelArrayBuffer) => {
                 expect(err).to.be.null;
 
-                audioTypedArrays = [
-                    new Float32Array(leftChannelArrayBuffer),
-                    new Float32Array(rightChannelArrayBuffer)
-                ];
+                audioTypedArrays = [ split(leftChannelArrayBuffer), split(rightChannelArrayBuffer) ];
 
                 done();
             });

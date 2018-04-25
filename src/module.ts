@@ -1,4 +1,3 @@
-import { concat } from './helpers/concat';
 import { encode } from './helpers/encode';
 import { IBrokerEvent, IEncodeResponse, IErrorResponse, IRecordResponse } from './interfaces';
 import { TTypedArray } from './types';
@@ -6,7 +5,7 @@ import { TTypedArray } from './types';
 export * from './interfaces';
 export * from './types';
 
-const recordings: Map<number, TTypedArray[]> = new Map();
+const recordings: Map<number, TTypedArray[][]> = new Map();
 
 addEventListener('message', ({ data }: IBrokerEvent) => {
     try {
@@ -26,17 +25,10 @@ addEventListener('message', ({ data }: IBrokerEvent) => {
             const recordedTypedArrays = recordings.get(recordingId);
 
             if (recordedTypedArrays === undefined) {
-                recordings.set(recordingId, typedArrays);
+                recordings.set(recordingId, [ typedArrays ]);
             } else {
-                recordings.set(
-                    recordingId,
-                    typedArrays
-                        .map((typedArray, index) => {
-                            const recordedTypedArray = recordedTypedArrays[index];
-
-                            return concat(Float32Array, recordedTypedArray, typedArray);
-                        })
-                    );
+                recordedTypedArrays
+                    .forEach((channel, index) => channel.push(typedArrays[index]));
             }
 
             postMessage(<IRecordResponse> { error: null, id, result: null });

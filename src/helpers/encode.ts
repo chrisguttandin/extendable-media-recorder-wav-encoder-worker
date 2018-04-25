@@ -1,11 +1,11 @@
 import { TTypedArray } from '../types';
 
-export const encode = (audioTypedArrays: TTypedArray[] = [], { bitRate = 16, sampleRate = 44100 } = {}) => {
+export const encode = (audioTypedArrays: TTypedArray[][] = [], { bitRate = 16, sampleRate = 44100 } = {}) => {
     const bytesPerSample = bitRate >> 3; // tslint:disable-line:no-bitwise
 
     const numberOfChannels = audioTypedArrays.length;
 
-    const numberOfSamples = audioTypedArrays[0].length;
+    const numberOfSamples = audioTypedArrays[0].reduce((length, channelData) => length + channelData.length, 0);
 
     const arrayBuffer = new ArrayBuffer((numberOfSamples * numberOfChannels * bytesPerSample) + 44);
 
@@ -26,15 +26,21 @@ export const encode = (audioTypedArrays: TTypedArray[] = [], { bitRate = 16, sam
     dataView.setUint32(40, arrayBuffer.byteLength - 44, true);
 
     audioTypedArrays
-        .forEach((audioTypedArray, index) => {
-            const offset = 44 + (index * bytesPerSample);
+        .forEach((channel, index) => {
+            let offset = 44 + (index * bytesPerSample);
 
-            for (let i = 0; i < numberOfSamples; i += 1) {
-                const position = offset + (i * numberOfChannels * bytesPerSample);
-                const value = audioTypedArray[i];
+            channel
+                .forEach((audioTypedArray) => {
+                    const length = audioTypedArray.length;
 
-                dataView.setUint16(position, (value < 0) ? Math.max(-1, value) * 32768 : Math.min(1, value) * 32767, true);
-            }
+                    for (let i = 0; i < length; i += 1) {
+                        const value = audioTypedArray[i];
+
+                        dataView.setUint16(offset, (value < 0) ? Math.max(-1, value) * 32768 : Math.min(1, value) * 32767, true);
+
+                        offset += numberOfChannels * bytesPerSample;
+                    }
+                });
         });
 
     return arrayBuffer;
