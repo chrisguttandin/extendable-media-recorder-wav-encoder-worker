@@ -1,5 +1,4 @@
-import { IWorkerDefinition } from 'worker-factory';
-import { TTypedArray } from '../types';
+import { IWorkerDefinition, TTypedArray } from 'worker-factory';
 
 export interface IExtendableMediaRecorderWavEncoderWorkerCustomDefinition extends IWorkerDefinition {
 

@@ -1,7 +1,6 @@
-import { createWorker } from 'worker-factory';
+import { TTypedArray, createWorker } from 'worker-factory';
 import { encode } from './helpers/encode';
 import { IExtendableMediaRecorderWavEncoderWorkerCustomDefinition } from './interfaces';
-import { TTypedArray } from './types';
 
 export * from './interfaces';
 export * from './types';
