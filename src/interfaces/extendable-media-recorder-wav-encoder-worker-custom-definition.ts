@@ -4,12 +4,6 @@ export interface IExtendableMediaRecorderWavEncoderWorkerCustomDefinition extend
 
     characterize: {
 
-        params: {
-
-            // @todo Allow to specify a Request without a parameter.
-
-        };
-
         response: {
 
             result: RegExp;

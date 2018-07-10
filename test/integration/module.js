@@ -24,7 +24,7 @@ describe('module', () => {
                 done();
             });
 
-            worker.postMessage({ id, method: 'characterize', params: { } });
+            worker.postMessage({ id, method: 'characterize' });
         });
 
     });

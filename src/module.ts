@@ -8,7 +8,7 @@ export * from './types';
 const recordings: Map<number, TTypedArray[][]> = new Map();
 
 createWorker<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>(self, {
-    characterize: ({ }) => {
+    characterize: () => {
         return { result: /^audio\/wav$/ };
     },
     encode: ({ recordingId }) => {
