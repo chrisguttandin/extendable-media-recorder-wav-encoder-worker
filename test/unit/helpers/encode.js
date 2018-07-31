@@ -21,8 +21,8 @@ describe('encode()', () => {
         loadFixtureAsArrayBuffer('1000-frames-of-noise-left.pcm', (err, leftChannelArrayBuffer) => {
             expect(err).to.be.null;
 
-            loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm', (err, rightChannelArrayBuffer) => {
-                expect(err).to.be.null;
+            loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm', (rr, rightChannelArrayBuffer) => {
+                expect(rr).to.be.null;
 
                 audioTypedArrays = [ split(leftChannelArrayBuffer), split(rightChannelArrayBuffer) ];
 
