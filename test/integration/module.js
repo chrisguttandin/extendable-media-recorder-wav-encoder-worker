@@ -6,7 +6,7 @@ describe('module', () => {
     let worker;
 
     beforeEach(() => {
-        worker = new Worker('base/src/module.ts');
+        worker = new Worker('base/src/module.js');
     });
 
     describe('characterize()', () => {
