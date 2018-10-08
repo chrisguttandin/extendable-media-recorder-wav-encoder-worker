@@ -4,6 +4,8 @@ export interface IExtendableMediaRecorderWavEncoderWorkerCustomDefinition extend
 
     characterize: {
 
+        params: undefined;
+
         response: {
 
             result: RegExp;
