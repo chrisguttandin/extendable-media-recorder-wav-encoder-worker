@@ -31,11 +31,11 @@ describe('module', () => {
 
     describe('encode()', () => {
 
-        let arrayBuffer;
         let audioContext;
         let id;
+        let originalArrayBuffer;
         let recordingId;
-        let typedArrays;
+        let typedArrayChunks;
 
         afterEach(() => audioContext.close());
 
@@ -48,16 +48,31 @@ describe('module', () => {
         beforeEach(function (done) {
             this.timeout(6000);
 
-            loadFixtureAsArrayBuffer('1000-frames-of-noise.wav', (err, fileArrayBuffer) => {
+            loadFixtureAsArrayBuffer('1000-frames-of-noise.wav', (err, arrayBuffer) => {
                 expect(err).to.be.null;
 
+                originalArrayBuffer = arrayBuffer;
+
                 audioContext
-                    .decodeAudioData(fileArrayBuffer.slice(0))
+                    .decodeAudioData(arrayBuffer.slice(0))
                     .then((audioBuffer) => {
-                        typedArrays = [];
+                        typedArrayChunks = [ ];
 
                         for (let i = 0; i < audioBuffer.numberOfChannels; i += 1) {
-                            typedArrays.push(audioBuffer.getChannelData(i));
+                            const channelData = audioBuffer.getChannelData(i);
+
+                            // @todo For some reason Chrome nullifies the last sample of the left channel.
+                            if (i === 0 && channelData[999] === 0) {
+                                channelData[999] = audioBuffer.getChannelData(1)[999];
+                            }
+
+                            for (let j = 0; j < channelData.length; j += 100) {
+                                if (i === 0) {
+                                    typedArrayChunks.push([ ]);
+                                }
+
+                                typedArrayChunks[j / 100].push(channelData.slice(j, j + 100));
+                            }
                         }
 
                         done();
@@ -68,29 +83,29 @@ describe('module', () => {
         beforeEach(function (done) {
             this.timeout(6000);
 
-            loadFixtureAsArrayBuffer('1000-frames-of-noise-44100-16-stereo.wav', (err, rryBffr) => {
-                expect(err).to.be.null;
+            const length = typedArrayChunks.length;
 
-                arrayBuffer = rryBffr;
-
-                done();
-            });
-        });
-
-        beforeEach(function (done) {
-            this.timeout(6000);
+            let recordedChunks = 0;
 
             worker.onmessage = () => {
-                worker.onmessage = null;
+                recordedChunks += 1;
 
-                done();
+                if (recordedChunks === length) {
+                    worker.onmessage = null;
+
+                    done();
+                }
             };
 
-            worker.postMessage({
-                id: 239,
-                method: 'record',
-                params: { recordingId, typedArrays }
-            });
+            for (let i = 0; i < length; i += 1) {
+                const typedArrays = typedArrayChunks[i];
+
+                worker.postMessage({
+                    id: 239 + i,
+                    method: 'record',
+                    params: { recordingId, typedArrays }
+                });
+            }
         });
 
         it('should return an array of the encoded data', function (done) {
@@ -99,8 +114,13 @@ describe('module', () => {
             worker.onmessage = ({ data }) => {
                 worker.onmessage = null;
 
-                for (let i = 0, length = arrayBuffer.length; i < length; i += 1) {
-                    expect(arrayBuffer[i]).to.be.closeTo(data.result[0][i], 1);
+                expect(data.result[0].byteLength).to.equal(originalArrayBuffer.byteLength);
+
+                const originalByteArray = new Uint8Array(originalArrayBuffer);
+                const reEncodedByteArray = new Uint8Array(data.result[0]);
+
+                for (let i = 0, length = originalByteArray.length; i < length; i += 1) {
+                    expect(originalByteArray[i]).to.be.closeTo(reEncodedByteArray[i], 1);
                 }
 
                 expect(data).to.deep.equal({ id, result: data.result });

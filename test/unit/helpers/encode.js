@@ -32,7 +32,7 @@ describe('encode()', () => {
     });
 
     leche.withData([
-        [ '1000-frames-of-noise-44100-16-stereo', 44100, 16 ]
+        [ '1000-frames-of-noise', 44100, 16 ]
     ], (filename, sampleRate, bitRate) => {
 
         let fileArrayBufferAsArray;

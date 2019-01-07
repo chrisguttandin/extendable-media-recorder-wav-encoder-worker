@@ -24,7 +24,7 @@ createWorker<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>(
             const recordedTypedArrays = recordings.get(recordingId);
 
             if (recordedTypedArrays === undefined) {
-                recordings.set(recordingId, [ typedArrays ]);
+                recordings.set(recordingId, typedArrays.map((typedArray) => [ typedArray ]));
             } else {
                 recordedTypedArrays
                     .forEach((channel, index) => channel.push(typedArrays[index]));
