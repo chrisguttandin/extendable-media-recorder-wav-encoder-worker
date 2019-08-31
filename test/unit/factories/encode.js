@@ -1,4 +1,5 @@
-import { encode } from '../../../src/helpers/encode';
+import { createEncode } from '../../../src/factories/encode';
+import { encodeHeader } from '../../../src/functions/encode-header';
 import { loadFixtureAsArrayBuffer } from '../../helper/load-fixture';
 
 const split = (channelArrayBuffer) => {
@@ -16,8 +17,11 @@ const split = (channelArrayBuffer) => {
 describe('encode()', () => {
 
     let audioTypedArrays;
+    let encode;
 
     beforeEach(function (done) {
+        encode = createEncode(encodeHeader);
+
         loadFixtureAsArrayBuffer('1000-frames-of-noise-left.pcm', (err, leftChannelArrayBuffer) => {
             expect(err).to.be.null;
 

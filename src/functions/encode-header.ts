@@ -1,10 +1,6 @@
-export const encodeHeader = (
-    dataView: DataView,
-    bitRate: number,
-    numberOfChannels: number,
-    numberOfSamples: number,
-    sampleRate: number
-) => {
+import { TEncodeHeaderFunction } from '../types';
+
+export const encodeHeader: TEncodeHeaderFunction = (dataView, bitRate, numberOfChannels, numberOfSamples, sampleRate) => {
     const bytesPerSample = bitRate >> 3; // tslint:disable-line:no-bitwise
     const dataChunkSize = (numberOfSamples * numberOfChannels * bytesPerSample);
 
