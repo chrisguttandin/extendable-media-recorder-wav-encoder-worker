@@ -1,12 +1,13 @@
 import { TTypedArray, TWorkerImplementation, createWorker } from 'worker-factory';
 import { createEncode } from './factories/encode';
+import { computeNumberOfSamples } from './functions/compute-number-of-samples';
 import { encodeHeader } from './functions/encode-header';
 import { IExtendableMediaRecorderWavEncoderWorkerCustomDefinition } from './interfaces';
 
 export * from './interfaces';
 export * from './types';
 
-const encode = createEncode(encodeHeader);
+const encode = createEncode(computeNumberOfSamples, encodeHeader);
 const recordings: Map<number, TTypedArray[][]> = new Map();
 
 createWorker<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>(

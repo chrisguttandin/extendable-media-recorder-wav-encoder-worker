@@ -1,3 +1,4 @@
+export * from './compute-number-of-samples-function';
 export * from './encode-factory';
 export * from './encode-function';
 export * from './encode-header-function';

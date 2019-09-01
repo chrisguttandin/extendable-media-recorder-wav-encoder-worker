@@ -1,4 +1,5 @@
 import { createEncode } from '../../../src/factories/encode';
+import { computeNumberOfSamples } from '../../../src/functions/compute-number-of-samples';
 import { encodeHeader } from '../../../src/functions/encode-header';
 import { loadFixtureAsArrayBuffer } from '../../helper/load-fixture';
 
@@ -20,7 +21,7 @@ describe('encode()', () => {
     let encode;
 
     beforeEach(function (done) {
-        encode = createEncode(encodeHeader);
+        encode = createEncode(computeNumberOfSamples, encodeHeader);
 
         loadFixtureAsArrayBuffer('1000-frames-of-noise-left.pcm', (err, leftChannelArrayBuffer) => {
             expect(err).to.be.null;
@@ -52,10 +53,7 @@ describe('encode()', () => {
         });
 
         it('should encode the arrayBuffer as a wav file', () => {
-            const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(audioTypedArrays, {
-                bitRate,
-                sampleRate
-            })[0]));
+            const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(audioTypedArrays, bitRate, sampleRate)[0]));
 
             for (let i = 0, length = encodeArrayBufferAsArray.length; i < length; i += 1) {
                 expect(encodeArrayBufferAsArray[i]).to.be.closeTo(fileArrayBufferAsArray[i], 1);
