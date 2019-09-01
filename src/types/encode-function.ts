@@ -1,3 +1,3 @@
 import { TTypedArray } from 'worker-factory';
 
-export type TEncodeFunction = (audioTypedArrays?: TTypedArray[][], bitRate?: number, sampleRate?: number) => ArrayBuffer[];
+export type TEncodeFunction = (channelDataArrays?: TTypedArray[][], bitRate?: number, sampleRate?: number) => ArrayBuffer[];

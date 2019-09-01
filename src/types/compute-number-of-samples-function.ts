@@ -1,3 +1,3 @@
 import { TTypedArray } from 'worker-factory';
 
-export type TComputeNumberOfSamplesFunction = (audioTypedArray: TTypedArray[]) => number;
+export type TComputeNumberOfSamplesFunction = (channelDataArray: TTypedArray[]) => number;

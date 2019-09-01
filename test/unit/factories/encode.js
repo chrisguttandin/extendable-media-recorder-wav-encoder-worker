@@ -17,7 +17,7 @@ const split = (channelArrayBuffer) => {
 
 describe('encode()', () => {
 
-    let audioTypedArrays;
+    let channelDataArrays;
     let encode;
 
     beforeEach(function (done) {
@@ -29,7 +29,7 @@ describe('encode()', () => {
             loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm', (rr, rightChannelArrayBuffer) => {
                 expect(rr).to.be.null;
 
-                audioTypedArrays = [ split(leftChannelArrayBuffer), split(rightChannelArrayBuffer) ];
+                channelDataArrays = [ split(leftChannelArrayBuffer), split(rightChannelArrayBuffer) ];
 
                 done();
             });
@@ -53,7 +53,7 @@ describe('encode()', () => {
         });
 
         it('should encode the arrayBuffer as a wav file', () => {
-            const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(audioTypedArrays, bitRate, sampleRate)[0]));
+            const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(channelDataArrays, bitRate, sampleRate)[0]));
 
             for (let i = 0, length = encodeArrayBufferAsArray.length; i < length; i += 1) {
                 expect(encodeArrayBufferAsArray[i]).to.be.closeTo(fileArrayBufferAsArray[i], 1);
