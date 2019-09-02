@@ -61,11 +61,6 @@ describe('module', () => {
                         for (let i = 0; i < audioBuffer.numberOfChannels; i += 1) {
                             const channelData = audioBuffer.getChannelData(i);
 
-                            // @todo For some reason Chrome nullifies the last sample of the left channel.
-                            if (i === 0 && channelData[999] === 0) {
-                                channelData[999] = audioBuffer.getChannelData(1)[999];
-                            }
-
                             for (let j = 0; j < channelData.length; j += 100) {
                                 if (i === 0) {
                                     typedArrayChunks.push([ ]);
