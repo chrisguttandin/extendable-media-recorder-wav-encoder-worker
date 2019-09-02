@@ -115,7 +115,7 @@ describe('module', () => {
                 const reEncodedByteArray = new Uint8Array(data.result[0]);
 
                 for (let i = 0, length = originalByteArray.length; i < length; i += 1) {
-                    expect(originalByteArray[i]).to.be.closeTo(reEncodedByteArray[i], 1);
+                    expect(reEncodedByteArray[i]).to.be.closeTo(originalByteArray[i], 1);
                 }
 
                 expect(data).to.deep.equal({ id, result: data.result });
@@ -126,7 +126,46 @@ describe('module', () => {
             worker.postMessage({
                 id,
                 method: 'encode',
-                params: { recordingId }
+                params: { recordingId, timeslice: null }
+            });
+        });
+
+        it('should return an array of the first slice of encoded data', function (done) {
+            this.timeout(6000);
+
+            worker.onmessage = ({ data }) => {
+                worker.onmessage = null;
+
+                expect(data.result[0].byteLength).to.equal(1808);
+
+                const originalByteArray = new Uint8Array(originalArrayBuffer);
+                const reEncodedByteArray = new Uint8Array(data.result[0]);
+
+                expect(reEncodedByteArray[4]).to.equal(247);
+                expect(reEncodedByteArray[5]).to.equal(255);
+                expect(reEncodedByteArray[6]).to.equal(255);
+                expect(reEncodedByteArray[7]).to.equal(255);
+
+                expect(reEncodedByteArray[40]).to.equal(211);
+                expect(reEncodedByteArray[41]).to.equal(255);
+                expect(reEncodedByteArray[42]).to.equal(255);
+                expect(reEncodedByteArray[43]).to.equal(255);
+
+                for (let i = 0, length = 1808; i < length; i += 1) {
+                    if ((i < 4 || i > 7) && (i < 40 || i > 43)) {
+                        expect(reEncodedByteArray[i]).to.be.closeTo(originalByteArray[i], 1);
+                    }
+                }
+
+                expect(data).to.deep.equal({ id, result: data.result });
+
+                done();
+            };
+
+            worker.postMessage({
+                id,
+                method: 'encode',
+                params: { recordingId, timeslice: 10 }
             });
         });
 

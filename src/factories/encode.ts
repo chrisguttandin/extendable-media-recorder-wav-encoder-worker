@@ -1,18 +1,27 @@
 import { TEncodeFactory } from '../types';
 
 export const createEncode: TEncodeFactory = (computeNumberOfSamples, encodeHeader) => {
-    return (channelDataArrays = [], bitRate = 16, sampleRate = 44100) => {
+    return (channelDataArrays, part, bitRate = 16, sampleRate = 44100) => {
         const bytesPerSample = bitRate >> 3; // tslint:disable-line:no-bitwise
+        const headerSize = (part === 'subsequent') ? 0 : 44;
         const numberOfChannels = channelDataArrays.length;
         const numberOfSamples = computeNumberOfSamples(channelDataArrays[0]);
-        const arrayBuffer = new ArrayBuffer((numberOfSamples * numberOfChannels * bytesPerSample) + 44);
+        const arrayBuffer = new ArrayBuffer((numberOfSamples * numberOfChannels * bytesPerSample) + headerSize);
         const dataView = new DataView(arrayBuffer);
 
-        encodeHeader(dataView, bitRate, numberOfChannels, numberOfSamples, sampleRate);
+        if (part !== 'subsequent') {
+            encodeHeader(
+                dataView,
+                bitRate,
+                numberOfChannels,
+                (part === 'complete') ? numberOfSamples : Number.POSITIVE_INFINITY,
+                sampleRate
+            );
+        }
 
         channelDataArrays
             .forEach((channel, index) => {
-                let offset = 44 + (index * bytesPerSample);
+                let offset = headerSize + (index * bytesPerSample);
 
                 channel
                     .forEach((channelDataArray) => {

@@ -2,7 +2,11 @@ import { TEncodeHeaderFunction } from '../types';
 
 export const encodeHeader: TEncodeHeaderFunction = (dataView, bitRate, numberOfChannels, numberOfSamples, sampleRate) => {
     const bytesPerSample = bitRate >> 3; // tslint:disable-line:no-bitwise
-    const dataChunkSize = (numberOfSamples * numberOfChannels * bytesPerSample);
+    /*
+     * The maximum size of a RIFF file is 4294967295 bytes and since the header takes up 44 bytes there are 4294967251 bytes left for the
+     * data chunk.
+     */
+    const dataChunkSize = Math.min(numberOfSamples * numberOfChannels * bytesPerSample, 4294967251);
 
     dataView.setUint32(0, 1380533830); // That's the integer representation of 'RIFF'.
     dataView.setUint32(4, dataChunkSize + 36, true);

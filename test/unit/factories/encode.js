@@ -53,7 +53,7 @@ describe('encode()', () => {
         });
 
         it('should encode the arrayBuffer as a wav file', () => {
-            const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(channelDataArrays, bitRate, sampleRate)[0]));
+            const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(channelDataArrays, 'complete', bitRate, sampleRate)[0]));
 
             for (let i = 0, length = encodeArrayBufferAsArray.length; i < length; i += 1) {
                 expect(encodeArrayBufferAsArray[i]).to.be.closeTo(fileArrayBufferAsArray[i], 1);

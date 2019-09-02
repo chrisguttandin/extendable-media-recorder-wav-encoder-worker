@@ -1,4 +1,5 @@
 import { IWorkerDefinition, TTypedArray } from 'worker-factory';
+import { IEncodeResponse } from './encode-response';
 
 export interface IExtendableMediaRecorderWavEncoderWorkerCustomDefinition extends IWorkerDefinition {
 
@@ -20,15 +21,11 @@ export interface IExtendableMediaRecorderWavEncoderWorkerCustomDefinition extend
 
             recordingId: number;
 
-        };
-
-        response: {
-
-            result: ArrayBuffer[];
-
-            transferables: ArrayBuffer[];
+            timeslice: null | number;
 
         };
+
+        response: IEncodeResponse;
 
     };
 
