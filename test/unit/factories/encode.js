@@ -20,20 +20,13 @@ describe('encode()', () => {
     let channelDataArrays;
     let encode;
 
-    beforeEach(function (done) {
+    beforeEach(async () => {
         encode = createEncode(computeNumberOfSamples, encodeHeader);
 
-        loadFixtureAsArrayBuffer('1000-frames-of-noise-left.pcm', (err, leftChannelArrayBuffer) => {
-            expect(err).to.be.null;
+        const leftChannelArrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise-left.pcm');
+        const rightChannelArrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm');
 
-            loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm', (rr, rightChannelArrayBuffer) => {
-                expect(rr).to.be.null;
-
-                channelDataArrays = [ split(leftChannelArrayBuffer), split(rightChannelArrayBuffer) ];
-
-                done();
-            });
-        });
+        channelDataArrays = [ split(leftChannelArrayBuffer), split(rightChannelArrayBuffer) ];
     });
 
     leche.withData([
@@ -42,14 +35,10 @@ describe('encode()', () => {
 
         let fileArrayBufferAsArray;
 
-        beforeEach((done) => {
-            loadFixtureAsArrayBuffer(filename + '.wav', (err, fileArrayBuffer) => {
-                expect(err).to.be.null;
+        beforeEach(async () => {
+            const fileArrayBuffer = await loadFixtureAsArrayBuffer(`${ filename }.wav`);
 
-                fileArrayBufferAsArray = Array.from(new Uint16Array(fileArrayBuffer));
-
-                done();
-            });
+            fileArrayBufferAsArray = Array.from(new Uint16Array(fileArrayBuffer));
         });
 
         it('should encode the arrayBuffer as a wav file', () => {

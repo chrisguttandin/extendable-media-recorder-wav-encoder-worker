@@ -31,9 +31,9 @@ describe('module', () => {
 
     describe('encode()', () => {
 
+        let arrayBuffer;
         let audioContext;
         let id;
-        let originalArrayBuffer;
         let recordingId;
         let typedArrayChunks;
 
@@ -45,34 +45,26 @@ describe('module', () => {
             recordingId = 23;
         });
 
-        beforeEach(function (done) {
+        beforeEach(async function () {
             this.timeout(6000);
 
-            loadFixtureAsArrayBuffer('1000-frames-of-noise.wav', (err, arrayBuffer) => {
-                expect(err).to.be.null;
+            arrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise.wav');
 
-                originalArrayBuffer = arrayBuffer;
+            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
 
-                audioContext
-                    .decodeAudioData(arrayBuffer.slice(0))
-                    .then((audioBuffer) => {
-                        typedArrayChunks = [ ];
+            typedArrayChunks = [ ];
 
-                        for (let i = 0; i < audioBuffer.numberOfChannels; i += 1) {
-                            const channelData = audioBuffer.getChannelData(i);
+            for (let i = 0; i < audioBuffer.numberOfChannels; i += 1) {
+                const channelData = audioBuffer.getChannelData(i);
 
-                            for (let j = 0; j < channelData.length; j += 100) {
-                                if (i === 0) {
-                                    typedArrayChunks.push([ ]);
-                                }
+                for (let j = 0; j < channelData.length; j += 100) {
+                    if (i === 0) {
+                        typedArrayChunks.push([ ]);
+                    }
 
-                                typedArrayChunks[j / 100].push(channelData.slice(j, j + 100));
-                            }
-                        }
-
-                        done();
-                    });
-            });
+                    typedArrayChunks[j / 100].push(channelData.slice(j, j + 100));
+                }
+            }
         });
 
         beforeEach(function (done) {
@@ -109,9 +101,9 @@ describe('module', () => {
             worker.onmessage = ({ data }) => {
                 worker.onmessage = null;
 
-                expect(data.result[0].byteLength).to.equal(originalArrayBuffer.byteLength);
+                expect(data.result[0].byteLength).to.equal(arrayBuffer.byteLength);
 
-                const originalByteArray = new Uint8Array(originalArrayBuffer);
+                const originalByteArray = new Uint8Array(arrayBuffer);
                 const reEncodedByteArray = new Uint8Array(data.result[0]);
 
                 for (let i = 0, length = originalByteArray.length; i < length; i += 1) {
@@ -138,7 +130,7 @@ describe('module', () => {
 
                 expect(data.result[0].byteLength).to.equal(1808);
 
-                const originalByteArray = new Uint8Array(originalArrayBuffer);
+                const originalByteArray = new Uint8Array(arrayBuffer);
                 const reEncodedByteArray = new Uint8Array(data.result[0]);
 
                 expect(reEncodedByteArray[4]).to.equal(247);
