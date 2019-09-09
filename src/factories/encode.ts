@@ -30,7 +30,7 @@ export const createEncode: TEncodeFactory = (computeNumberOfSamples, encodeHeade
                         for (let i = 0; i < length; i += 1) {
                             const value = channelDataArray[i];
 
-                            dataView.setUint16(offset, (value < 0) ? Math.max(-1, value) * 32768 : Math.min(1, value) * 32767, true);
+                            dataView.setInt16(offset, (value < 0) ? Math.max(-1, value) * 32768 : Math.min(1, value) * 32767, true);
 
                             offset += numberOfChannels * bytesPerSample;
                         }
