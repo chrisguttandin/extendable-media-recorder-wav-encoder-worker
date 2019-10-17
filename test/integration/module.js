@@ -35,6 +35,7 @@ describe('module', () => {
         let audioContext;
         let id;
         let recordingId;
+        let sampleRate;
         let typedArrayChunks;
 
         afterEach(() => audioContext.close());
@@ -43,6 +44,7 @@ describe('module', () => {
             audioContext = new AudioContext();
             id = 49;
             recordingId = 23;
+            sampleRate = 44100;
         });
 
         beforeEach(async function () {
@@ -90,7 +92,7 @@ describe('module', () => {
                 worker.postMessage({
                     id: 239 + i,
                     method: 'record',
-                    params: { recordingId, typedArrays }
+                    params: { recordingId, sampleRate, typedArrays }
                 });
             }
         });
@@ -118,7 +120,7 @@ describe('module', () => {
             worker.postMessage({
                 id,
                 method: 'encode',
-                params: { recordingId, timeslice: null }
+                params: { recordingId, sampleRate, timeslice: null }
             });
         });
 
@@ -157,7 +159,7 @@ describe('module', () => {
             worker.postMessage({
                 id,
                 method: 'encode',
-                params: { recordingId, timeslice: 10 }
+                params: { recordingId, sampleRate, timeslice: 10 }
             });
         });
 

@@ -32,14 +32,17 @@ createWorker<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>(
             const recording = recordings.get(recordingId);
 
             if (timeslice !== null) {
-                // @todo Allow sampleRate to be configured.
-                if (recording === undefined || (computeNumberOfSamples(recording.channelDataArrays[0]) / 44.1) < timeslice) {
+                if (recording === undefined
+                        || (computeNumberOfSamples(recording.channelDataArrays[0]) * (1000 / recording.sampleRate)) < timeslice) {
                     return new Promise<IEncodeResponse>((resolve, reject) => {
                         encodings.set(recordingId, { reject, resolve, timeslice });
                     });
                 }
 
-                const shiftedChannelDataArrays = shiftChannelDataArrays(recording.channelDataArrays, Math.ceil(timeslice * 44.1));
+                const shiftedChannelDataArrays = shiftChannelDataArrays(
+                    recording.channelDataArrays,
+                    Math.ceil(timeslice * (recording.sampleRate / 1000))
+                );
                 const arrayBuffers = encode(shiftedChannelDataArrays, recording.isComplete ? 'initial' : 'subsequent');
 
                 recording.isComplete = false;
@@ -57,13 +60,16 @@ createWorker<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>(
 
             return { result: [ ], transferables: [ ] };
         },
-        record: ({ recordingId, typedArrays }) => {
-            const recording = createOrUpdateRecording(recordingId, typedArrays);
+        record: ({ recordingId, sampleRate, typedArrays }) => {
+            const recording = createOrUpdateRecording(recordingId, sampleRate, typedArrays);
             const encoding = encodings.get(recordingId);
 
-            // @todo Allow sampleRate to be configured.
-            if (encoding !== undefined && (computeNumberOfSamples(recording.channelDataArrays[0]) / 44.1) >= encoding.timeslice) {
-                const shiftedChannelDataArrays = shiftChannelDataArrays(recording.channelDataArrays, Math.ceil(encoding.timeslice * 44.1));
+            if (encoding !== undefined
+                    && (computeNumberOfSamples(recording.channelDataArrays[0]) * (1000 / sampleRate)) >= encoding.timeslice) {
+                const shiftedChannelDataArrays = shiftChannelDataArrays(
+                    recording.channelDataArrays,
+                    Math.ceil(encoding.timeslice * (sampleRate / 1000))
+                );
                 const arrayBuffers = encode(shiftedChannelDataArrays, recording.isComplete ? 'initial' : 'subsequent');
 
                 recording.isComplete = false;

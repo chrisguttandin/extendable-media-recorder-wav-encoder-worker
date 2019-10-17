@@ -6,4 +6,6 @@ export interface IRecording {
 
     isComplete: boolean;
 
+    sampleRate: number;
+
 }

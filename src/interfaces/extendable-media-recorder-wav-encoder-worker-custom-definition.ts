@@ -35,6 +35,8 @@ export interface IExtendableMediaRecorderWavEncoderWorkerCustomDefinition extend
 
             recordingId: number;
 
+            sampleRate: number;
+
             typedArrays: TTypedArray[];
 
         };
