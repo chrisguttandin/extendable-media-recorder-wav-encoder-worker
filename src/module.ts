@@ -6,8 +6,12 @@ import { encodeHeader } from './functions/encode-header';
 import { shiftChannelDataArrays } from './functions/shift-channel-data-arrays';
 import { IEncodeResponse, IEncoding, IExtendableMediaRecorderWavEncoderWorkerCustomDefinition, IRecording } from './interfaces';
 
-export * from './interfaces';
-export * from './types';
+/*
+ * @todo Explicitly referencing the barrel file seems to be necessary when enabling the
+ * isolatedModules compiler option.
+ */
+export * from './interfaces/index';
+export * from './types/index';
 
 const recordings = new Map<number, IRecording>();
 const createOrUpdateRecording = createCreateOrUpdateRecording(recordings);
