@@ -1,7 +1,7 @@
 import { TEncodeFactory } from '../types';
 
 export const createEncode: TEncodeFactory = (computeNumberOfSamples, encodeHeader) => {
-    return (channelDataArrays, part, bitRate = 16, sampleRate = 44100) => {
+    return (channelDataArrays, part, bitRate, sampleRate) => {
         const bytesPerSample = bitRate >> 3; // tslint:disable-line:no-bitwise
         const headerSize = (part === 'subsequent') ? 0 : 44;
         const numberOfChannels = channelDataArrays.length;

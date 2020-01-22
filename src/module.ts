@@ -47,7 +47,12 @@ createWorker<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>(
                     recording.channelDataArrays,
                     Math.ceil(timeslice * (recording.sampleRate / 1000))
                 );
-                const arrayBuffers = encode(shiftedChannelDataArrays, recording.isComplete ? 'initial' : 'subsequent');
+                const arrayBuffers = encode(
+                    shiftedChannelDataArrays,
+                    recording.isComplete ? 'initial' : 'subsequent',
+                    16,
+                    recording.sampleRate
+                );
 
                 recording.isComplete = false;
 
@@ -55,7 +60,12 @@ createWorker<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>(
             }
 
             if (recording !== undefined) {
-                const arrayBuffers = encode(recording.channelDataArrays, recording.isComplete ? 'complete' : 'subsequent');
+                const arrayBuffers = encode(
+                    recording.channelDataArrays,
+                    recording.isComplete ? 'complete' : 'subsequent',
+                    16,
+                    recording.sampleRate
+                );
 
                 recordings.delete(recordingId);
 
@@ -74,7 +84,7 @@ createWorker<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>(
                     recording.channelDataArrays,
                     Math.ceil(encoding.timeslice * (sampleRate / 1000))
                 );
-                const arrayBuffers = encode(shiftedChannelDataArrays, recording.isComplete ? 'initial' : 'subsequent');
+                const arrayBuffers = encode(shiftedChannelDataArrays, recording.isComplete ? 'initial' : 'subsequent', 16, sampleRate);
 
                 recording.isComplete = false;
                 encodings.delete(recordingId);
