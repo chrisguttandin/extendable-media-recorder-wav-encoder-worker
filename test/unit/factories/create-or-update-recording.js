@@ -71,7 +71,7 @@ describe('createOrUpdateRecording()', () => {
             sampleRate = 48000;
             typedArrays = [ new Float32Array(12), new Float32Array(12) ];
 
-            recordings.set(recordingId, { channelDataArrays: [ [ new Float32Array(8) ], [ new Float32Array(8) ] ], isComplete: false, sampleRate });
+            recordings.set(recordingId, { channelDataArrays: [ [ new Float32Array(8) ], [ new Float32Array(8) ] ], isComplete: false, sampleRate });
         });
 
         it('should update the existing recording', () => {

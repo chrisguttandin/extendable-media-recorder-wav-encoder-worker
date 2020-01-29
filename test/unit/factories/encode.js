@@ -1,5 +1,5 @@
-import { createEncode } from '../../../src/factories/encode';
 import { computeNumberOfSamples } from '../../../src/functions/compute-number-of-samples';
+import { createEncode } from '../../../src/factories/encode';
 import { encodeHeader } from '../../../src/functions/encode-header';
 import { loadFixtureAsArrayBuffer } from '../../helper/load-fixture';
 
@@ -36,7 +36,7 @@ describe('encode()', () => {
         let fileArrayBufferAsArray;
 
         beforeEach(async () => {
-            const fileArrayBuffer = await loadFixtureAsArrayBuffer(`${ filename }.wav`);
+            const fileArrayBuffer = await loadFixtureAsArrayBuffer(`${ filename }.wav`);
 
             fileArrayBufferAsArray = Array.from(new Uint16Array(fileArrayBuffer));
         });
