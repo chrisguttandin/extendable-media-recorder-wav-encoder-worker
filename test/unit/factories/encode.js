@@ -4,7 +4,7 @@ import { encodeHeader } from '../../../src/functions/encode-header';
 import { loadFixtureAsArrayBuffer } from '../../helper/load-fixture';
 
 const split = (channelArrayBuffer) => {
-    const chunks = [ ];
+    const chunks = [];
 
     for (let i = 0; i < channelArrayBuffer.byteLength; i += Float32Array.BYTES_PER_ELEMENT * 128) {
         const length = Math.min((channelArrayBuffer.byteLength - i) / Float32Array.BYTES_PER_ELEMENT, 128);
@@ -16,7 +16,6 @@ const split = (channelArrayBuffer) => {
 };
 
 describe('encode()', () => {
-
     let channelDataArrays;
     let encode;
 
@@ -26,17 +25,14 @@ describe('encode()', () => {
         const leftChannelArrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise-left.pcm');
         const rightChannelArrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm');
 
-        channelDataArrays = [ split(leftChannelArrayBuffer), split(rightChannelArrayBuffer) ];
+        channelDataArrays = [split(leftChannelArrayBuffer), split(rightChannelArrayBuffer)];
     });
 
-    leche.withData([
-        [ '1000-frames-of-noise', 44100, 16 ]
-    ], (filename, sampleRate, bitRate) => {
-
+    leche.withData([['1000-frames-of-noise', 44100, 16]], (filename, sampleRate, bitRate) => {
         let fileArrayBufferAsArray;
 
         beforeEach(async () => {
-            const fileArrayBuffer = await loadFixtureAsArrayBuffer(`${ filename }.wav`);
+            const fileArrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.wav`);
 
             fileArrayBufferAsArray = Array.from(new Uint16Array(fileArrayBuffer));
         });
@@ -48,7 +44,5 @@ describe('encode()', () => {
                 expect(encodeArrayBufferAsArray[i]).to.be.closeTo(fileArrayBufferAsArray[i], 1);
             }
         });
-
     });
-
 });

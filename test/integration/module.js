@@ -2,7 +2,6 @@ import { AudioContext } from 'standardized-audio-context';
 import { loadFixtureAsArrayBuffer } from '../helper/load-fixture';
 
 describe('module', () => {
-
     let worker;
 
     beforeEach(() => {
@@ -10,7 +9,6 @@ describe('module', () => {
     });
 
     describe('characterize()', () => {
-
         let id;
 
         beforeEach(() => {
@@ -26,11 +24,9 @@ describe('module', () => {
 
             worker.postMessage({ id, method: 'characterize' });
         });
-
     });
 
     describe('encode()', () => {
-
         let arrayBuffer;
         let audioContext;
         let id;
@@ -54,14 +50,14 @@ describe('module', () => {
 
             const audioBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
 
-            typedArrayChunks = [ ];
+            typedArrayChunks = [];
 
             for (let i = 0; i < audioBuffer.numberOfChannels; i += 1) {
                 const channelData = audioBuffer.getChannelData(i);
 
                 for (let j = 0; j < channelData.length; j += 100) {
                     if (i === 0) {
-                        typedArrayChunks.push([ ]);
+                        typedArrayChunks.push([]);
                     }
 
                     typedArrayChunks[j / 100].push(channelData.slice(j, j + 100));
@@ -162,11 +158,9 @@ describe('module', () => {
                 params: { recordingId, sampleRate, timeslice: 10 }
             });
         });
-
     });
 
     describe('record()', () => {
-
         let id;
         let recordingId;
 
@@ -182,9 +176,11 @@ describe('module', () => {
                 done();
             });
 
-            worker.postMessage({ id, method: 'record', params: { recordingId, typedArrays: [ new Float32Array(128), new Float32Array(128) ] } });
+            worker.postMessage({
+                id,
+                method: 'record',
+                params: { recordingId, typedArrays: [new Float32Array(128), new Float32Array(128)] }
+            });
         });
-
     });
-
 });

@@ -1,13 +1,12 @@
 import { shiftChannelDataArrays } from '../../../src/functions/shift-channel-data-arrays';
 
 describe('shiftChannelDataArrays()', () => {
-
     let channelDataArrays;
 
     beforeEach(() => {
         channelDataArrays = [
-            [ new Float32Array(18), new Float32Array(4), new Float32Array(16), new Float32Array(12) ],
-            [ new Float32Array(18), new Float32Array(4), new Float32Array(16), new Float32Array(12) ]
+            [new Float32Array(18), new Float32Array(4), new Float32Array(16), new Float32Array(12)],
+            [new Float32Array(18), new Float32Array(4), new Float32Array(16), new Float32Array(12)]
         ];
     });
 
@@ -84,5 +83,4 @@ describe('shiftChannelDataArrays()', () => {
 
         expect(channelDataArrays[1].length).to.equal(0);
     });
-
 });

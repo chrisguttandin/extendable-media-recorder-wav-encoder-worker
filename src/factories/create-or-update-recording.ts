@@ -6,7 +6,7 @@ export const createCreateOrUpdateRecording: TCreateOrUpdateRecordingFactory = (r
 
         if (recording === undefined) {
             const newRecording = {
-                channelDataArrays: typedArrays.map((typedArray) => [ typedArray ]),
+                channelDataArrays: typedArrays.map((typedArray) => [typedArray]),
                 isComplete: true,
                 sampleRate
             };
@@ -18,8 +18,7 @@ export const createCreateOrUpdateRecording: TCreateOrUpdateRecordingFactory = (r
 
         // @todo Check if the given sampleRate is the same as the one of the recording.
 
-        recording.channelDataArrays
-            .forEach((channelDataArray, index) => channelDataArray.push(typedArrays[index]));
+        recording.channelDataArrays.forEach((channelDataArray, index) => channelDataArray.push(typedArrays[index]));
 
         return recording;
     };

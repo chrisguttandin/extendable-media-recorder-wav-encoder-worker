@@ -2,7 +2,7 @@ import { TTypedArray } from 'worker-factory';
 import { TShiftChannelDataArraysFunction } from '../types';
 
 export const shiftChannelDataArrays: TShiftChannelDataArraysFunction = (channelDataArrays, numberOfSamples) => {
-    const shiftedChannelDataArrays: TTypedArray[][] = [ ];
+    const shiftedChannelDataArrays: TTypedArray[][] = [];
 
     let numberOfShiftedSamples = 0;
 
@@ -13,7 +13,7 @@ export const shiftChannelDataArrays: TShiftChannelDataArraysFunction = (channelD
             const channelDataArray = channelDataArrays[i];
 
             if (shiftedChannelDataArrays[i] === undefined) {
-                shiftedChannelDataArrays[i] = [ ];
+                shiftedChannelDataArrays[i] = [];
             }
 
             const channelData = channelDataArray.shift();
@@ -33,14 +33,13 @@ export const shiftChannelDataArrays: TShiftChannelDataArraysFunction = (channelD
     if (numberOfShiftedSamples > numberOfSamples) {
         const unnecessarySamples = numberOfShiftedSamples - numberOfSamples;
 
-        shiftedChannelDataArrays
-            .forEach((shiftedChannelDataArray, index) => {
-                const channelData = <TTypedArray> shiftedChannelDataArray.pop();
-                const offset = channelData.length - unnecessarySamples;
+        shiftedChannelDataArrays.forEach((shiftedChannelDataArray, index) => {
+            const channelData = <TTypedArray>shiftedChannelDataArray.pop();
+            const offset = channelData.length - unnecessarySamples;
 
-                shiftedChannelDataArray.push(channelData.subarray(0, offset));
-                channelDataArrays[index].unshift(channelData.subarray(offset));
-            });
+            shiftedChannelDataArray.push(channelData.subarray(0, offset));
+            channelDataArrays[index].unshift(channelData.subarray(offset));
+        });
     }
 
     return shiftedChannelDataArrays;

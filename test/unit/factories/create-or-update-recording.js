@@ -1,7 +1,6 @@
 import { createCreateOrUpdateRecording } from '../../../src/factories/create-or-update-recording';
 
 describe('createOrUpdateRecording()', () => {
-
     let createOrUpdateRecording;
     let recordings;
 
@@ -11,7 +10,6 @@ describe('createOrUpdateRecording()', () => {
     });
 
     describe('without an existing recording', () => {
-
         let recordingId;
         let sampleRate;
         let typedArrays;
@@ -19,7 +17,7 @@ describe('createOrUpdateRecording()', () => {
         beforeEach(() => {
             recordingId = Math.round(Math.random() * 1000);
             sampleRate = 48000;
-            typedArrays = [ new Float32Array(12), new Float32Array(12) ];
+            typedArrays = [new Float32Array(12), new Float32Array(12)];
         });
 
         it('should create a new recording', () => {
@@ -57,11 +55,9 @@ describe('createOrUpdateRecording()', () => {
 
             expect(recording.sampleRate).to.equal(48000);
         });
-
     });
 
     describe('with an existing recording', () => {
-
         let recordingId;
         let sampleRate;
         let typedArrays;
@@ -69,9 +65,13 @@ describe('createOrUpdateRecording()', () => {
         beforeEach(() => {
             recordingId = Math.round(Math.random() * 1000);
             sampleRate = 48000;
-            typedArrays = [ new Float32Array(12), new Float32Array(12) ];
+            typedArrays = [new Float32Array(12), new Float32Array(12)];
 
-            recordings.set(recordingId, { channelDataArrays: [ [ new Float32Array(8) ], [ new Float32Array(8) ] ], isComplete: false, sampleRate });
+            recordings.set(recordingId, {
+                channelDataArrays: [[new Float32Array(8)], [new Float32Array(8)]],
+                isComplete: false,
+                sampleRate
+            });
         });
 
         it('should update the existing recording', () => {
@@ -109,7 +109,5 @@ describe('createOrUpdateRecording()', () => {
 
             expect(recording.sampleRate).to.equal(48000);
         });
-
     });
-
 });

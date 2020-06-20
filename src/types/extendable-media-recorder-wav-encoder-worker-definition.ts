@@ -1,5 +1,6 @@
 import { TWorkerDefinition } from 'worker-factory';
 import { IExtendableMediaRecorderWavEncoderWorkerCustomDefinition } from '../interfaces';
 
-export type TExtendableMediaRecorderWavEncoderWorkerDefinition =
-    TWorkerDefinition<IExtendableMediaRecorderWavEncoderWorkerCustomDefinition>;
+export type TExtendableMediaRecorderWavEncoderWorkerDefinition = TWorkerDefinition<
+    IExtendableMediaRecorderWavEncoderWorkerCustomDefinition
+>;
