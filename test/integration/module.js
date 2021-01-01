@@ -1,4 +1,4 @@
-import { AudioContext } from 'standardized-audio-context';
+import { OfflineAudioContext } from 'standardized-audio-context';
 import { loadFixtureAsArrayBuffer } from '../helper/load-fixture';
 
 describe('module', () => {
@@ -28,19 +28,17 @@ describe('module', () => {
 
     describe('encode()', () => {
         let arrayBuffer;
-        let audioContext;
         let id;
+        let offlineAudioContext;
         let recordingId;
         let sampleRate;
         let typedArrayChunks;
 
-        afterEach(() => audioContext.close());
-
         beforeEach(() => {
-            audioContext = new AudioContext();
             id = 49;
-            recordingId = 23;
             sampleRate = 44100;
+            offlineAudioContext = new OfflineAudioContext({ length: 1, sampleRate });
+            recordingId = 23;
         });
 
         beforeEach(async function () {
@@ -48,7 +46,7 @@ describe('module', () => {
 
             arrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise.wav');
 
-            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
+            const audioBuffer = await offlineAudioContext.decodeAudioData(arrayBuffer.slice(0));
 
             typedArrayChunks = [];
 
