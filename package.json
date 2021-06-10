@@ -11,7 +11,7 @@
     "dependencies": {
         "@babel/runtime": "^7.14.5",
         "tslib": "^2.2.0",
-        "worker-factory": "^6.0.44"
+        "worker-factory": "^6.0.45"
     },
     "description": "The worker which is used by the extendable-media-recorder-wav-encoder package.",
     "devDependencies": {
