@@ -18,31 +18,24 @@ const split = (channelArrayBuffer) => {
 describe('encode()', () => {
     let channelDataArrays;
     let encode;
+    let fileArrayBufferAsArray;
 
     beforeEach(async () => {
         encode = createEncode(computeNumberOfSamples, encodeHeader);
 
+        const fileArrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise.wav');
         const leftChannelArrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise-left.pcm');
         const rightChannelArrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise-right.pcm');
 
         channelDataArrays = [split(leftChannelArrayBuffer), split(rightChannelArrayBuffer)];
+        fileArrayBufferAsArray = Array.from(new Uint16Array(fileArrayBuffer));
     });
 
-    leche.withData([['1000-frames-of-noise', 44100, 16]], (filename, sampleRate, bitRate) => {
-        let fileArrayBufferAsArray;
+    it('should encode the arrayBuffer as a wav file', () => {
+        const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(channelDataArrays, 'complete', 16, 44100)[0]));
 
-        beforeEach(async () => {
-            const fileArrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.wav`);
-
-            fileArrayBufferAsArray = Array.from(new Uint16Array(fileArrayBuffer));
-        });
-
-        it('should encode the arrayBuffer as a wav file', () => {
-            const encodeArrayBufferAsArray = Array.from(new Uint16Array(encode(channelDataArrays, 'complete', bitRate, sampleRate)[0]));
-
-            for (let i = 0, length = encodeArrayBufferAsArray.length; i < length; i += 1) {
-                expect(encodeArrayBufferAsArray[i]).to.be.closeTo(fileArrayBufferAsArray[i], 1);
-            }
-        });
+        for (let i = 0, length = encodeArrayBufferAsArray.length; i < length; i += 1) {
+            expect(encodeArrayBufferAsArray[i]).to.be.closeTo(fileArrayBufferAsArray[i], 1);
+        }
     });
 });
