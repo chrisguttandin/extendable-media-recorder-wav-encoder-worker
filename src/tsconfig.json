@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        "isolatedModules": true
+        "isolatedModules": true,
+        "module": "esnext"
     },
     "extends": "tsconfig-holy-grail/src/tsconfig-web-worker"
 }
