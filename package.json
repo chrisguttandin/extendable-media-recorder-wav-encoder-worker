@@ -58,7 +58,7 @@
         "tslint-config-holy-grail": "^56.0.6",
         "typescript": "^5.7.2",
         "unplugin-parcel-macros": "^0.1.1",
-        "webpack": "^5.96.1"
+        "webpack": "^5.97.1"
     },
     "files": [
         "build/es2019/",
