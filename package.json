@@ -54,6 +54,7 @@
         "tslint-config-holy-grail": "^56.0.6",
         "typescript": "^5.9.3",
         "unplugin-parcel-macros": "^0.1.1",
+        "vitest": "^4.0.15",
         "webpack": "^5.103.0"
     },
     "files": [
