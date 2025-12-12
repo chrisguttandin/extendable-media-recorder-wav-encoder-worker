@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { computeNumberOfSamples } from '../../../src/functions/compute-number-of-samples';
 
 describe('computeNumberOfSamples()', () => {

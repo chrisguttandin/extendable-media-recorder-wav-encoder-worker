@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { shiftChannelDataArrays } from '../../../src/functions/shift-channel-data-arrays';
 
 describe('shiftChannelDataArrays()', () => {

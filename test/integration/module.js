@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { OfflineAudioContext } from 'standardized-audio-context';
 import { loadFixtureAsArrayBuffer } from '../helper/load-fixture';
 
@@ -5,7 +6,7 @@ describe('module', () => {
     let worker;
 
     beforeEach(() => {
-        worker = new Worker('base/src/module.js');
+        worker = new Worker(new URL('../../src/module', import.meta.url), { type: 'module' });
     });
 
     describe('characterize()', () => {
@@ -15,14 +16,18 @@ describe('module', () => {
             id = 49;
         });
 
-        it('should return an regular expression', (done) => {
+        it('should return an regular expression', () => {
+            const { promise, resolve } = Promise.withResolvers();
+
             worker.addEventListener('message', ({ data }) => {
                 expect(data).to.deep.equal({ id, result: /^audio\/wav$/ });
 
-                done();
+                resolve();
             });
 
             worker.postMessage({ id, method: 'characterize' });
+
+            return promise;
         });
     });
 
@@ -41,9 +46,7 @@ describe('module', () => {
             recordingId = 23;
         });
 
-        beforeEach(async function () {
-            this.timeout(6000);
-
+        beforeEach(async () => {
             arrayBuffer = await loadFixtureAsArrayBuffer('1000-frames-of-noise.wav');
 
             const audioBuffer = await offlineAudioContext.decodeAudioData(arrayBuffer.slice(0));
@@ -63,9 +66,8 @@ describe('module', () => {
             }
         });
 
-        beforeEach(function (done) {
-            this.timeout(6000);
-
+        beforeEach(() => {
+            const { promise, resolve } = Promise.withResolvers();
             const length = typedArrayChunks.length;
 
             let recordedChunks = 0;
@@ -76,7 +78,7 @@ describe('module', () => {
                 if (recordedChunks === length) {
                     worker.onmessage = null;
 
-                    done();
+                    resolve();
                 }
             };
 
@@ -89,10 +91,12 @@ describe('module', () => {
                     params: { recordingId, sampleRate, typedArrays }
                 });
             }
+
+            return promise;
         });
 
-        it('should return an array of the encoded data', function (done) {
-            this.timeout(6000);
+        it('should return an array of the encoded data', () => {
+            const { promise, resolve } = Promise.withResolvers();
 
             worker.onmessage = ({ data }) => {
                 worker.onmessage = null;
@@ -108,7 +112,7 @@ describe('module', () => {
 
                 expect(data).to.deep.equal({ id, result: data.result });
 
-                done();
+                resolve();
             };
 
             worker.postMessage({
@@ -116,10 +120,12 @@ describe('module', () => {
                 method: 'encode',
                 params: { recordingId, sampleRate, timeslice: null }
             });
+
+            return promise;
         });
 
-        it('should return an array of the first slice of encoded data', function (done) {
-            this.timeout(6000);
+        it('should return an array of the first slice of encoded data', () => {
+            const { promise, resolve } = Promise.withResolvers();
 
             worker.onmessage = ({ data }) => {
                 worker.onmessage = null;
@@ -147,7 +153,7 @@ describe('module', () => {
 
                 expect(data).to.deep.equal({ id, result: data.result });
 
-                done();
+                resolve();
             };
 
             worker.postMessage({
@@ -155,6 +161,8 @@ describe('module', () => {
                 method: 'encode',
                 params: { recordingId, sampleRate, timeslice: 10 }
             });
+
+            return promise;
         });
     });
 
@@ -167,11 +175,13 @@ describe('module', () => {
             recordingId = 23;
         });
 
-        it('should accept incoming typedArrays', (done) => {
+        it('should accept incoming typedArrays', () => {
+            const { promise, resolve } = Promise.withResolvers();
+
             worker.addEventListener('message', ({ data }) => {
                 expect(data).to.deep.equal({ id, result: null });
 
-                done();
+                resolve();
             });
 
             worker.postMessage({
@@ -179,6 +189,8 @@ describe('module', () => {
                 method: 'record',
                 params: { recordingId, typedArrays: [new Float32Array(128), new Float32Array(128)] }
             });
+
+            return promise;
         });
     });
 });
