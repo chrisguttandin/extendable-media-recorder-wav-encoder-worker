@@ -25,7 +25,7 @@
         "@vitest/browser-webdriverio": "^4.1.2",
         "commitizen": "^4.3.1",
         "cz-conventional-changelog": "^3.3.0",
-        "esbuild": "^0.25.11",
+        "esbuild": "^0.27.4",
         "eslint": "^8.57.0",
         "eslint-config-holy-grail": "^61.0.12",
         "husky": "^9.1.7",
